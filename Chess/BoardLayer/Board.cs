@@ -19,7 +19,7 @@
             return pieces[row, column];
         }
 
-        public Piece GetPiece(Position pos)
+        public Piece GetOnePiece(Position pos)
         {
             return pieces[pos.Row, pos.Column];
         }
@@ -27,7 +27,22 @@
         public bool isPositionEmpty(Position pos)
         {
             CheckPositionValidation(pos);
-            return GetPiece(pos) == null;
+            return GetOnePiece(pos) == null;
+        }
+
+        public Piece RemovePiece(Position pos)
+        {
+            if(isPositionEmpty(pos))
+            {
+                return null;
+            }
+            else
+            {
+                Piece aux = GetOnePiece(pos);
+                aux.Position = null;
+                pieces[pos.Row, pos.Column] = null;
+                return aux;
+            }
         }
 
         public void SetPiece(Piece p, Position pos)
@@ -44,7 +59,7 @@
             
         }
 
-        public bool isPositionValid(Position pos)
+        public bool IsPositionValid(Position pos)
         {
             if(pos.Row < 0 || pos.Row >= Rows || pos.Column < 0 || pos.Column >= Cols)
             {
@@ -55,7 +70,7 @@
 
         public void CheckPositionValidation(Position pos)
         {
-            if(!isPositionValid(pos))
+            if(!IsPositionValid(pos))
             {
                 throw new BoardException("Invalid Position!");
             }
