@@ -1,4 +1,5 @@
 ﻿using System;
+using BoardLayer;
 
 namespace Chess
 {
@@ -6,7 +7,7 @@ namespace Chess
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Board b = new Board(8, 8);
         }
     }
 }
