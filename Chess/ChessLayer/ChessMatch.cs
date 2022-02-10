@@ -1,4 +1,5 @@
 ﻿using BoardLayer;
+using System.Collections.Generic;
 
 namespace ChessLayer
 {
@@ -8,6 +9,9 @@ namespace ChessLayer
         public int Turn { get; private set; }
         public Color CurrentPlayer { get; private set; }
         public bool MatchFinished { get; private set; }
+        private HashSet<Piece> _pieces;
+        private HashSet<Piece> _capturedPieces;
+
 
         public ChessMatch()
         {
@@ -15,6 +19,10 @@ namespace ChessLayer
             Turn = 1;
             CurrentPlayer = Color.White;
             MatchFinished = false;
+
+            _pieces = new HashSet<Piece>();
+            _capturedPieces = new HashSet<Piece>();
+
             SetInitialPieces();
         }
 
@@ -24,6 +32,11 @@ namespace ChessLayer
             p.IncrementMoviment();
             Piece capturedPiece = MatchBoard.RemovePiece(destiny);
             MatchBoard.SetPiece(p, destiny);
+
+            if(capturedPiece != null)
+            {
+                _capturedPieces.Add(capturedPiece);
+            }
         }
 
         public void MakePlay(Position origin, Position destiny)
@@ -75,22 +88,55 @@ namespace ChessLayer
             }
         }
 
-        public void SetInitialPieces()
+        public void SetNewPiece(char col, int row, Piece p)
+        {
+            MatchBoard.SetPiece(p, new ChessPosition(col, row).ToPosition());
+            _pieces.Add(p);
+        }
+
+        public HashSet<Piece> CapturedPieces(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach(Piece p in _capturedPieces)
+            {
+                if(p.Color == color)
+                {
+                    aux.Add(p);
+                }
+            }
+            return aux;
+        }
+
+        public HashSet<Piece> PiecesInPlay(Color color)
+        {
+            HashSet<Piece> aux = new HashSet<Piece>();
+            foreach (Piece p in _pieces)
+            {
+                if (p.Color == color)
+                {
+                    aux.Add(p);
+                }
+            }
+            aux.ExceptWith(CapturedPieces(color));
+            return aux;
+        }
+
+        private void SetInitialPieces()
         {
             //Setting the black pieces
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.Black), new ChessPosition('a', 8).ToPosition());
-            MatchBoard.SetPiece(new King(MatchBoard, Color.Black), new ChessPosition('e', 8).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.Black), new ChessPosition('h', 8).ToPosition());
+            SetNewPiece('a', 8, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('e', 8, new King(MatchBoard, Color.Black));
+            SetNewPiece('h', 8, new Rook(MatchBoard, Color.Black));
 
             //Setting the white pieces
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('a', 1).ToPosition());
-            MatchBoard.SetPiece(new King(MatchBoard, Color.White), new ChessPosition('e', 1).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('h', 1).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('d', 1).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('f', 1).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('d', 2).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('e', 2).ToPosition());
-            MatchBoard.SetPiece(new Rook(MatchBoard, Color.White), new ChessPosition('f', 2).ToPosition());
+            SetNewPiece('a', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('e', 1, new King(MatchBoard, Color.White));
+            SetNewPiece('h', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('d', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('f', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('d', 2, new Rook(MatchBoard, Color.White));
+            SetNewPiece('e', 2, new Rook(MatchBoard, Color.White));
+            SetNewPiece('f', 2, new Rook(MatchBoard, Color.White));
         }
     }
 }
