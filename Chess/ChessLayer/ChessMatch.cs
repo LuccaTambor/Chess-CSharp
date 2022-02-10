@@ -29,6 +29,7 @@ namespace ChessLayer
         public void SetInitialPieces()
         {
             MatchBoard.SetPiece(new Rook(MatchBoard, Color.Black), new ChessPosition('a', 8).ToPosition());
+            MatchBoard.SetPiece(new King(MatchBoard, Color.Black), new ChessPosition('b', 8).ToPosition());
         }
     }
 }
