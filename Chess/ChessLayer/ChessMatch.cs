@@ -11,6 +11,7 @@ namespace ChessLayer
         public bool MatchFinished { get; private set; }
         private HashSet<Piece> _pieces;
         private HashSet<Piece> _capturedPieces;
+        public bool Check { get; private set; }
 
 
         public ChessMatch()
@@ -19,6 +20,7 @@ namespace ChessLayer
             Turn = 1;
             CurrentPlayer = Color.White;
             MatchFinished = false;
+            Check = false;
 
             _pieces = new HashSet<Piece>();
             _capturedPieces = new HashSet<Piece>();
@@ -26,7 +28,7 @@ namespace ChessLayer
             SetInitialPieces();
         }
 
-        public void ExecuteMovement(Position origin, Position destiny)
+        public Piece ExecuteMovement(Position origin, Position destiny)
         {
             Piece p = MatchBoard.RemovePiece(origin);
             p.IncrementMoviment();
@@ -37,11 +39,42 @@ namespace ChessLayer
             {
                 _capturedPieces.Add(capturedPiece);
             }
+            return capturedPiece;
+        }
+
+        public void UndoMovement(Position origin, Position destiny, Piece capturedPiece)
+        {
+            Piece p = MatchBoard.RemovePiece(destiny);
+            p.DecrementMoviment();
+
+            if(capturedPiece != null)
+            {
+                MatchBoard.SetPiece(capturedPiece, destiny);
+
+                _capturedPieces.Remove(capturedPiece);
+            }
+            MatchBoard.SetPiece(p, origin);
         }
 
         public void MakePlay(Position origin, Position destiny)
         {
-            ExecuteMovement(origin, destiny);
+            Piece capturedPiece = ExecuteMovement(origin, destiny);
+
+            if(IsInCheck(CurrentPlayer))
+            {
+                UndoMovement(origin, destiny, capturedPiece);
+                throw new BoardException("You can't put yourself in Check!");
+            }
+
+            if(IsInCheck(Adversary(CurrentPlayer)))
+            {
+                Check = true;
+            }
+            else
+            {
+                Check = false;
+            }
+
             Turn++;
             ChangePlayer();
         }
@@ -88,6 +121,50 @@ namespace ChessLayer
             }
         }
 
+        private Color Adversary(Color color)
+        {
+            if(color == Color.White)
+            {
+                return Color.Black;
+            }
+            else
+            {
+                return Color.White;
+            }
+        }
+
+        private Piece GetKing(Color color)
+        {
+            foreach (Piece p in PiecesInPlay(color))
+            {
+                if(p is King)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
+        public bool IsInCheck(Color color)
+        {
+            Piece king = GetKing(color);
+
+            if(king == null)
+            {
+                throw new BoardException("King not founded!Something went Wrong!"); 
+            }
+
+            foreach(Piece p in PiecesInPlay(Adversary(color)))
+            {
+                bool[,] possibleMov = p.PossibleMoviments();
+                if (possibleMov[king.Position.Row, king.Position.Column])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void SetNewPiece(char col, int row, Piece p)
         {
             MatchBoard.SetPiece(p, new ChessPosition(col, row).ToPosition());
@@ -127,6 +204,8 @@ namespace ChessLayer
             SetNewPiece('a', 8, new Rook(MatchBoard, Color.Black));
             SetNewPiece('e', 8, new King(MatchBoard, Color.Black));
             SetNewPiece('h', 8, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('d', 7, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('f', 7, new Rook(MatchBoard, Color.Black));
 
             //Setting the white pieces
             SetNewPiece('a', 1, new Rook(MatchBoard, Color.White));

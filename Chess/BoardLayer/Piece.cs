@@ -20,6 +20,11 @@
             MovementQtd++;
         }
 
+        public void DecrementMoviment()
+        {
+            MovementQtd--;
+        }
+
         public bool ThereArePossibleMoviments()
         {
             bool[,] pm = PossibleMoviments();
