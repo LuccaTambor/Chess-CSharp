@@ -17,55 +17,79 @@ namespace ChessLayer
             return p == null || p.Color != Color;
         }
 
+        private bool ThereIsEnemy(Position pos)
+        {
+            Piece p = Board.GetOnePiece(pos);
+            return p != null && p.Color != Color;
+        }
+
+        private bool Free(Position pos)
+        {
+            return Board.GetOnePiece(pos) == null;
+        }
+
         public override bool[,] PossibleMoviments()
         {
             bool[,] possibleMoviments = new bool[Board.Rows, Board.Cols];
 
             Position pos = new Position(0, 0);
 
-            //Verifing north movement
-            pos.DefineValues(Position.Row - 1, Position.Column);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
+            if(Color == Color.White)
             {
-                possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
+                //Standart move of a Pawn
+                pos.DefineValues(Position.Row - 1, Position.Column);
+                if(Board.IsPositionValid(pos) && Free(pos))
                 {
-                    break;
+                    possibleMoviments[pos.Row, pos.Column] = true;
                 }
-                pos.Row--;
+
+                //First move of a pawn where he can move two spaces
+                pos.DefineValues(Position.Row - 2, Position.Column);
+                if (Board.IsPositionValid(pos) && Free(pos) && MovementQtd == 0)
+                {
+                    possibleMoviments[pos.Row, pos.Column] = true;
+                }
+
+                //Movement of pawn if theres a enemy on its diagonals
+                pos.DefineValues(Position.Row - 1, Position.Column - 1);
+                if (Board.IsPositionValid(pos) && ThereIsEnemy(pos))
+                {
+                    possibleMoviments[pos.Row, pos.Column] = true;
+                }
+                pos.DefineValues(Position.Row - 1, Position.Column + 1);
+                if (Board.IsPositionValid(pos) && ThereIsEnemy(pos))
+                {
+                    possibleMoviments[pos.Row, pos.Column] = true;
+                }
+
             }
-            //Verifing south movement
-            pos.DefineValues(Position.Row + 1, Position.Column);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
+            else
             {
-                possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
+                //Standart move of a Pawn
+                pos.DefineValues(Position.Row + 1, Position.Column);
+                if (Board.IsPositionValid(pos) && Free(pos))
                 {
-                    break;
+                    possibleMoviments[pos.Row, pos.Column] = true;
                 }
-                pos.Row++;
-            }
-            //Verifing east movement
-            pos.DefineValues(Position.Row, Position.Column + 1);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
-            {
-                possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
+
+                //First move of a pawn where he can move two spaces
+                pos.DefineValues(Position.Row + 2, Position.Column);
+                if (Board.IsPositionValid(pos) && Free(pos) && MovementQtd == 0)
                 {
-                    break;
+                    possibleMoviments[pos.Row, pos.Column] = true;
                 }
-                pos.Column++;
-            }
-            //Verifing west movement
-            pos.DefineValues(Position.Row, Position.Column - 1);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
-            {
-                possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
+
+                //Movement of pawn if theres a enemy on its diagonals
+                pos.DefineValues(Position.Row + 1, Position.Column - 1);
+                if (Board.IsPositionValid(pos) && ThereIsEnemy(pos))
                 {
-                    break;
+                    possibleMoviments[pos.Row, pos.Column] = true;
                 }
-                pos.Column--;
+                pos.DefineValues(Position.Row + 1, Position.Column + 1);
+                if (Board.IsPositionValid(pos) && ThereIsEnemy(pos))
+                {
+                    possibleMoviments[pos.Row, pos.Column] = true;
+                }
             }
 
             return possibleMoviments;

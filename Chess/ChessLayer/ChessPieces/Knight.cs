@@ -22,49 +22,54 @@ namespace ChessLayer
 
             Position pos = new Position(0, 0);
 
-            //Verifing north movement
-            pos.DefineValues(Position.Row - 1, Position.Column);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
+            //Knight has L shape possible moves
+
+            pos.DefineValues(Position.Row - 1, Position.Column - 2);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
-                {
-                    break;
-                }
-                pos.Row--;
             }
-            //Verifing south movement
-            pos.DefineValues(Position.Row + 1, Position.Column);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
+            //Verifing northeast movement
+            pos.DefineValues(Position.Row - 2, Position.Column - 1);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
-                {
-                    break;
-                }
-                pos.Row++;
             }
             //Verifing east movement
-            pos.DefineValues(Position.Row, Position.Column + 1);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
+            pos.DefineValues(Position.Row - 2, Position.Column + 1);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
-                {
-                    break;
-                }
-                pos.Column++;
+            }
+            //Verifing southeast movement
+            pos.DefineValues(Position.Row - 1, Position.Column + 2);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
+            {
+                possibleMoviments[pos.Row, pos.Column] = true;
+            }
+            //Verifing south movement
+            pos.DefineValues(Position.Row + 1, Position.Column + 2);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
+            {
+                possibleMoviments[pos.Row, pos.Column] = true;
+            }
+            //Verifing southwest movement
+            pos.DefineValues(Position.Row + 2, Position.Column + 1);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
+            {
+                possibleMoviments[pos.Row, pos.Column] = true;
             }
             //Verifing west movement
-            pos.DefineValues(Position.Row, Position.Column - 1);
-            while (Board.IsPositionValid(pos) && VerifyMove(pos))
+            pos.DefineValues(Position.Row + 2, Position.Column - 1);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
-                if (Board.GetOnePiece(pos) != null && Board.GetOnePiece(pos).Color != Color)
-                {
-                    break;
-                }
-                pos.Column--;
+            }
+            //Verifing northwest movement
+            pos.DefineValues(Position.Row + 1, Position.Column - 2);
+            if (Board.IsPositionValid(pos) && VerifyMove(pos))
+            {
+                possibleMoviments[pos.Row, pos.Column] = true;
             }
 
             return possibleMoviments;

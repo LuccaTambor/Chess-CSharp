@@ -242,14 +242,43 @@ namespace ChessLayer
         private void SetInitialPieces()
         {
             //Setting the black pieces
-            SetNewPiece('b', 8, new Rook(MatchBoard, Color.Black));
-            SetNewPiece('a', 8, new King(MatchBoard, Color.Black));
+            SetNewPiece('a', 8, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('b', 8, new Knight(MatchBoard, Color.Black));
+            SetNewPiece('c', 8, new Bishop(MatchBoard, Color.Black));
+            SetNewPiece('d', 8, new Queen(MatchBoard, Color.Black));
+            SetNewPiece('e', 8, new King(MatchBoard, Color.Black));
+            SetNewPiece('f', 8, new Bishop(MatchBoard, Color.Black));
+            SetNewPiece('g', 8, new Knight(MatchBoard, Color.Black));
+            SetNewPiece('h', 8, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('a', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('b', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('c', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('d', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('e', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('f', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('g', 7, new Pawn(MatchBoard, Color.Black));
+            SetNewPiece('h', 7, new Pawn(MatchBoard, Color.Black));
+
+
 
             //Setting the white pieces
-            SetNewPiece('c', 1, new Rook(MatchBoard, Color.White));
-            SetNewPiece('d', 1, new King(MatchBoard, Color.White));
-            SetNewPiece('h', 7, new Rook(MatchBoard, Color.White));
-          
+            SetNewPiece('a', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('b', 1, new Knight(MatchBoard, Color.White));
+            SetNewPiece('c', 1, new Bishop(MatchBoard, Color.White));
+            SetNewPiece('d', 1, new Queen(MatchBoard, Color.White));
+            SetNewPiece('e', 1, new King(MatchBoard, Color.White));
+            SetNewPiece('f', 1, new Bishop(MatchBoard, Color.White));
+            SetNewPiece('g', 1, new Knight(MatchBoard, Color.White));
+            SetNewPiece('h', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('a', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('b', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('c', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('d', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('e', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('f', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('g', 2, new Pawn(MatchBoard, Color.White));
+            SetNewPiece('h', 2, new Pawn(MatchBoard, Color.White));
+
         }
     }
 }

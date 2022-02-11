@@ -23,8 +23,8 @@ namespace ChessLayer
 
             Position pos = new Position(0, 0);
 
-            //Verifing north movement
-            pos.DefineValues(Position.Row - 1, Position.Column);
+            //Verifing northwest moviments
+            pos.DefineValues(Position.Row - 1, Position.Column - 1);
             while (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
@@ -32,10 +32,10 @@ namespace ChessLayer
                 {
                     break;
                 }
-                pos.Row--;
+                pos.DefineValues(pos.Row - 1, pos.Column - 1);
             }
-            //Verifing south movement
-            pos.DefineValues(Position.Row + 1, Position.Column);
+            //Verifing northeats moviments
+            pos.DefineValues(Position.Row - 1, Position.Column + 1);
             while (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
@@ -43,10 +43,10 @@ namespace ChessLayer
                 {
                     break;
                 }
-                pos.Row++;
+                pos.DefineValues(Position.Row - 1, Position.Column + 1);
             }
-            //Verifing east movement
-            pos.DefineValues(Position.Row, Position.Column + 1);
+            //Verifing southeast moviments
+            pos.DefineValues(Position.Row + 1, Position.Column + 1);
             while (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
@@ -54,10 +54,10 @@ namespace ChessLayer
                 {
                     break;
                 }
-                pos.Column++;
+                pos.DefineValues(Position.Row + 1, Position.Column + 1);
             }
-            //Verifing west movement
-            pos.DefineValues(Position.Row, Position.Column - 1);
+            //Verifing southwest moviments
+            pos.DefineValues(Position.Row + 1, Position.Column - 1);
             while (Board.IsPositionValid(pos) && VerifyMove(pos))
             {
                 possibleMoviments[pos.Row, pos.Column] = true;
@@ -65,7 +65,7 @@ namespace ChessLayer
                 {
                     break;
                 }
-                pos.Column--;
+                pos.DefineValues(Position.Row + 1, Position.Column - 1);
             }
 
             return possibleMoviments;
