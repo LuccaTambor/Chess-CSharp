@@ -75,8 +75,16 @@ namespace ChessLayer
                 Check = false;
             }
 
-            Turn++;
-            ChangePlayer();
+            if(IsInCheckMate(Adversary(CurrentPlayer)))
+            {
+                MatchFinished = true;
+            }
+            else
+            {
+                Turn++;
+                ChangePlayer();
+            }
+            
         }
 
         public void ValidOriginPosition(Position origin)
@@ -165,6 +173,39 @@ namespace ChessLayer
             return false;
         }
 
+        public bool IsInCheckMate(Color color)
+        {
+            if(!IsInCheck(color))
+            {
+                return false;
+            }
+
+            foreach(Piece p in PiecesInPlay(color))
+            {
+                bool[,] possibilities = p.PossibleMoviments();
+                for(int i = 0; i < MatchBoard.Rows; i++)
+                {
+                    for(int j = 0; j < MatchBoard.Cols; j++)
+                    {
+                        if (possibilities[i, j])
+                        {
+                            Position origin = p.Position;
+                            Position destiny = new Position(i, j);
+                            Piece capturedPiece = ExecuteMovement(origin, destiny);
+                            bool checkTest = IsInCheck(color);
+                            UndoMovement(origin, destiny, capturedPiece);
+
+                            if(!checkTest)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
         public void SetNewPiece(char col, int row, Piece p)
         {
             MatchBoard.SetPiece(p, new ChessPosition(col, row).ToPosition());
@@ -201,21 +242,14 @@ namespace ChessLayer
         private void SetInitialPieces()
         {
             //Setting the black pieces
-            SetNewPiece('a', 8, new Rook(MatchBoard, Color.Black));
-            SetNewPiece('e', 8, new King(MatchBoard, Color.Black));
-            SetNewPiece('h', 8, new Rook(MatchBoard, Color.Black));
-            SetNewPiece('d', 7, new Rook(MatchBoard, Color.Black));
-            SetNewPiece('f', 7, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('b', 8, new Rook(MatchBoard, Color.Black));
+            SetNewPiece('a', 8, new King(MatchBoard, Color.Black));
 
             //Setting the white pieces
-            SetNewPiece('a', 1, new Rook(MatchBoard, Color.White));
-            SetNewPiece('e', 1, new King(MatchBoard, Color.White));
-            SetNewPiece('h', 1, new Rook(MatchBoard, Color.White));
-            SetNewPiece('d', 1, new Rook(MatchBoard, Color.White));
-            SetNewPiece('f', 1, new Rook(MatchBoard, Color.White));
-            SetNewPiece('d', 2, new Rook(MatchBoard, Color.White));
-            SetNewPiece('e', 2, new Rook(MatchBoard, Color.White));
-            SetNewPiece('f', 2, new Rook(MatchBoard, Color.White));
+            SetNewPiece('c', 1, new Rook(MatchBoard, Color.White));
+            SetNewPiece('d', 1, new King(MatchBoard, Color.White));
+            SetNewPiece('h', 7, new Rook(MatchBoard, Color.White));
+          
         }
     }
 }

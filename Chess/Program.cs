@@ -46,6 +46,8 @@ namespace Chess
                     }
 
                 }
+                Console.Clear();
+                Screen.PrintMatch(match);
             }
             catch(BoardException e)
             {

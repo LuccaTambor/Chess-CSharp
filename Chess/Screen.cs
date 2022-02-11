@@ -15,12 +15,23 @@ namespace Chess
             PrintCapturesPieces(match);
             Console.WriteLine();
             Console.WriteLine($"Turn {match.Turn}");
-            Console.WriteLine($"Waiting play: {match.CurrentPlayer}");
 
-            if(match.Check)
+            if (!match.MatchFinished)
             {
-                Console.WriteLine("You are in Check!");
+                Console.WriteLine($"Waiting play: {match.CurrentPlayer}");
+
+                if (match.Check)
+                {
+                    Console.WriteLine("You are in Check!");
+                }
             }
+            else
+            {
+                Console.WriteLine("Checkmate!");
+                Console.WriteLine("Winner: " + match.CurrentPlayer);
+            }
+
+            
         }
 
         public static void PrintCapturesPieces(ChessMatch match)
